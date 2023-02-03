@@ -3,8 +3,8 @@ from typing import TypeAlias
 
 import numpy as np
 import numpy.typing as npt
-import pandas as pd  # type: ignore
-from pandas.io.formats.style import Styler  # type: ignore
+import pandas as pd
+from pandas.io.formats.style import Styler
 
 PropertyName: TypeAlias = str
 PropertyValue: TypeAlias = str
@@ -28,7 +28,7 @@ def set_property_mask(
         Styler: Styler instance of Pandas
     """
 
-    sty: pd.DataFrame.style
+    sty: Styler
     if isinstance(arr, pd.DataFrame):
         sty = arr.style
     elif isinstance(arr, Styler):
@@ -36,8 +36,8 @@ def set_property_mask(
     else:
         raise TypeError(f'unexpected data: {arr} {type(arr)}')
 
-    for i in range(sty.data.shape[1]):
-        sty.set_properties(**property, subset=pd.IndexSlice[mask[:, i], i])
+    for i in range(sty.data.shape[1]):  # type: ignore
+        sty.set_properties(**property, subset=pd.IndexSlice[mask[:, i], i])  # type: ignore
 
     return sty
 
