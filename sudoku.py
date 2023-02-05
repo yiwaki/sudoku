@@ -2,6 +2,7 @@ import argparse
 import logging
 import os
 import time
+from enum import Enum
 from typing import Optional, Self
 
 import numpy as np
@@ -608,6 +609,16 @@ class BruteForce(IO_):
         return matrix_work
 
 
+# RunMode Class
+class RunMode(Enum):
+    PY_BRUTE_FORCE = 1
+    C_BRUTE_FORCE = 2
+    NO_BRUTE_FORCE = 0
+
+
+run_mode: RunMode = RunMode.PY_BRUTE_FORCE
+
+
 # Sudoku Class - Main Class
 class Sudoku(PruneBits, IsolatedBit, BruteForce, Verify, LogCtrl, IO_):
     """Sudoku Main Class"""
@@ -624,6 +635,16 @@ class Sudoku(PruneBits, IsolatedBit, BruteForce, Verify, LogCtrl, IO_):
     _handler_name: Log.HandlerName
 
     _popcount_sum: dict[object, list[int]]
+
+    def run_mode(self, run_mode_: int = 1) -> None:
+        # set run mode of brute force
+        global run_mode
+        if run_mode_ == 1:
+            run_mode = RunMode.PY_BRUTE_FORCE
+        elif run_mode_ == 2:
+            run_mode = RunMode.C_BRUTE_FORCE
+        else:
+            run_mode = RunMode.NO_BRUTE_FORCE
 
     def __zero_sum(self) -> None:
         self._popcount_sum = {
@@ -662,13 +683,26 @@ class Sudoku(PruneBits, IsolatedBit, BruteForce, Verify, LogCtrl, IO_):
                 continue
             else:
                 self.into_msg_area()
-                # return False
+                break
 
-            # run brute force algorism
-            self.into_msg_area('BRUTE_FORCE')
+        # run brute force algorism
+        self.into_msg_area('BRUTE_FORCE')
+        global run_mode
+        if run_mode == RunMode.PY_BRUTE_FORCE:
+            msg = 'execute Brute Force (Python version)'
+            self._logger.info(msg)
+            print(msg)
             self._working = self.brute_force(self._working)
-            self.into_msg_area()
-            return True
+        elif run_mode == RunMode.C_BRUTE_FORCE:
+            msg = 'execute Brute Force (C version)'
+            self._logger.info(msg)
+            print(msg)
+        else:
+            msg = 'skipped Brute Force'
+            self._logger.info(msg)
+            print(msg)
+        self.into_msg_area()
+        return True
 
     def run(self) -> Self:  # type: ignore
         """run method to solve"""
@@ -705,6 +739,8 @@ class Sudoku(PruneBits, IsolatedBit, BruteForce, Verify, LogCtrl, IO_):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser('sudoku')
     parser.add_argument('filename', type=str, help='sudoku problem file')
+    run_mode_help = '1:PY_BRUTE_FORCE, 2:C_BRUTE_FORCE, 0:NO_BRUTE_FURCE'
+    parser.add_argument('-r', '--run_mode', type=int, default=1, help=run_mode_help)
     parser.add_argument('--log_lv', type=str, default='')
     parser.add_argument('-l', '--log', type=str, default='a.log')
     parser.add_argument('--nolog', action='store_true')
@@ -718,6 +754,7 @@ if __name__ == '__main__':
         sudoku.quiet()
 
     sudoku._logfilepath = args.log
+    sudoku.run_mode(args.run_mode)
     sudoku.msg_level('DDD')
     sudoku.run()
     sudoku.display_result_text()
