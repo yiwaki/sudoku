@@ -505,8 +505,8 @@ class BruteForce(IO_):
     _logger: Log
 
     def __log_matrix(self, matrix_: Matrix.Binary) -> None:
-        mask: Matrix.Mask = Bitmap.popcount(matrix_) == 1
-        tmp1: Matrix.Decimal = Bitmap.to_binary(matrix_)
+        mask: Matrix.Mask = Bitmap.popcount(matrix_) == 1  # type: ignore
+        tmp1: Matrix.Decimal = Bitmap.to_binary(matrix_)  # type: ignore
         tmp2 = Coloring.coloring_mask(tmp1, mask, 'yellow')
 
         d_msg = f'\n{Repr_.repr(tmp2)}'
@@ -530,7 +530,7 @@ class BruteForce(IO_):
         """whether the result is correct"""
         for block in Block.types:
             for block_no in range(block.cell_count_in_block()):
-                mask: Matrix.Mask = block.block_mask(block_no)
+                mask: Matrix.Mask = block.block_mask(mx.BlockNo(block_no))
                 coverage: np.int_ = np.bitwise_or.reduce(matrix_[mask])
                 if coverage != Bitmap.full_bits:
                     self._logger.debug(
@@ -538,7 +538,7 @@ class BruteForce(IO_):
                     )
                     return False
 
-        status: bool = np.all(Bitmap.popcount(matrix_) == 1)
+        status: bool = np.all(Bitmap.popcount(matrix_) == 1)  # type: ignore
         if not status:
             self._logger.debug('popcount != 0')
         return status
@@ -555,7 +555,7 @@ class BruteForce(IO_):
         for block in Block.types:
             block_no: mx.BlockNo
             position: mx.BlockPos
-            block_no, position = block.addr_to_loc(pivot)
+            block_no, position = block.addr_to_loc(pivot)  # type: ignore
             self._logger.debug(f'{block.type}: {block_no=}')
 
             mask: Matrix.Mask = block.block_mask(block_no)
@@ -574,7 +574,7 @@ class BruteForce(IO_):
         cell_no += 1
         if cell_no == 81:
             # end of cell
-            self._logger.debug(f'reached end of cell')
+            self._logger.debug('reached end of cell')
             return matrix_
 
         addr = Matrix.cell_no_to_addr(cell_no)
@@ -584,7 +584,7 @@ class BruteForce(IO_):
         for bit in bits:
             # trial to select one bit in target cell
             matrix_buf: Matrix.Binary
-            matrix_buf = self.prune_by_pivot(matrix_work, addr, bit)
+            matrix_buf = self.prune_by_pivot(matrix_work, addr, bit)  # type: ignore
             if matrix_buf is None:
                 # revert and got next candidate bit
                 self._logger.debug('Revert')
