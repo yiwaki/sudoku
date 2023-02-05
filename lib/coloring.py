@@ -21,13 +21,13 @@ class Coloring:
     __is_color_monitor: bool = True
 
     @staticmethod
-    def __csv_to_list(csv: Optional[str]) -> list[str] | None:
+    def __csv_to_list(csv: Optional[str]) -> Optional[list[str]]:
         if csv is None:
             return csv
         return csv.split(',')
 
     @staticmethod
-    def __iterable_to_csv(lst: Iterable[str] | None) -> str | None:
+    def __iterable_to_csv(lst: Optional[Iterable[str]]) -> Optional[str]:
         """iterable of string to csv string"""
         if lst is None:
             return None
@@ -64,9 +64,7 @@ class Coloring:
         attrs: Optional[Attrs] = None,
     ) -> str:
         """set color escape sequences to string for list (overload)"""
-        return np.vectorize(cls.coloring)(
-            lst, color, on_color, cls.__iterable_to_csv(attrs)
-        )
+        return np.vectorize(cls.coloring)(lst, color, on_color, cls.__iterable_to_csv(attrs))
 
     @coloring.register(np.ndarray)
     @classmethod
@@ -78,9 +76,7 @@ class Coloring:
         attrs: Optional[Attrs] = None,
     ) -> str:
         """set color escape sequence to string for ndarray (overload)"""
-        out = np.vectorize(cls.coloring)(
-            arr, color, on_color, cls.__iterable_to_csv(attrs)
-        )
+        out = np.vectorize(cls.coloring)(arr, color, on_color, cls.__iterable_to_csv(attrs))
         return out
 
     # colored_mask
