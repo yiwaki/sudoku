@@ -33,6 +33,13 @@ class Matrix:
     size: int = 9
     shape: Shape = (size, size)
 
+    @classmethod
+    def cell_no_to_addr(cls, cell_no: int) -> Address:
+        return (cell_no // cls.size, cell_no % cls.size)
+
+    def __new__(cls) -> Self:  # type: ignore
+        pass
+
 
 class Block:
     """Block class
@@ -256,6 +263,11 @@ class Square(Block):
 
 
 if __name__ == '__main__':
+    print('##################################################')
+    print(Matrix.cell_no_to_addr(7))
+    print(Matrix.cell_no_to_addr(80))
+    print(Matrix.cell_no_to_addr(56))
+
     block_no = BlockNo(3)
     print('##################################################')
     Row()
