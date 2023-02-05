@@ -502,13 +502,11 @@ class IsolatedBit(IO_):
 
 # BruteForce（総当たり）Class
 class BruteForce(IO_):
-    # _given_no: int
     _logger: Log
-    __recursion_depth: int
 
     def __log_matrix(self, matrix_: Matrix.Binary) -> None:
-        mask: Matrix.Mask = Bitmap.popcount(matrix_) == 1  # type: ignore
-        tmp1: Matrix.Decimal = Bitmap.to_binary(matrix_)  # type: ignore
+        mask: Matrix.Mask = Bitmap.popcount(matrix_) == 1
+        tmp1: Matrix.Decimal = Bitmap.to_binary(matrix_)
         tmp2 = Coloring.coloring_mask(tmp1, mask, 'yellow')
 
         d_msg = f'\n{Repr_.repr(tmp2)}'
@@ -532,7 +530,7 @@ class BruteForce(IO_):
         """whether the result is correct"""
         for block in Block.types:
             for block_no in range(block.cell_count_in_block()):
-                mask: Matrix.Mask = block.block_mask(mx.BlockNo(block_no))
+                mask: Matrix.Mask = block.block_mask(block_no)
                 coverage: np.int_ = np.bitwise_or.reduce(matrix_[mask])
                 if coverage != Bitmap.full_bits:
                     self._logger.debug(
@@ -540,7 +538,7 @@ class BruteForce(IO_):
                     )
                     return False
 
-        status: bool = np.all(Bitmap.popcount(matrix_) == 1)  # type: ignore
+        status: bool = np.all(Bitmap.popcount(matrix_) == 1)
         if not status:
             self._logger.debug('popcount != 0')
         return status
@@ -557,7 +555,7 @@ class BruteForce(IO_):
         for block in Block.types:
             block_no: mx.BlockNo
             position: mx.BlockPos
-            block_no, position = block.addr_to_loc(pivot)  # type: ignore
+            block_no, position = block.addr_to_loc(pivot)
             self._logger.debug(f'{block.type}: {block_no=}')
 
             mask: Matrix.Mask = block.block_mask(block_no)
@@ -571,83 +569,41 @@ class BruteForce(IO_):
 
         return matrix_work
 
-    @staticmethod
-    def next_row_no(
-        matrix_: Matrix.Binary, row_no: mx.BlockNo
-    ) -> tuple[mx.BlockNo, Optional[Matrix.Mask]]:
-        """goto next row no -- skip row where all columns are fixed"""
-        row_mask: Matrix.Binary
-        while True:
-            row_mask = Row.block_mask(row_no)  # type: ignore
-            row_mask = row_mask & (Bitmap.popcount(matrix_) > 1)
-            if np.any(row_mask):
-                return (row_no, row_mask)  # type: ignore
-
-            row_no += 1
-            if row_no > Row.cell_count_in_block():
-                return (mx.BlockNo(-1), None)
-
-    def brute_force(
-        self, matrix_: Matrix.Binary, row_no: Optional[mx.BlockNo] = None
-    ) -> Matrix.Binary:
+    def brute_force(self, matrix_: Matrix.Binary, cell_no: int = -1) -> Matrix.Binary:
         """run brute force algorism"""
-        if row_no is None:
-            row_no = mx.BlockNo(0)
-            self.__recursion_depth = 0
-        self.__recursion_depth += 1
-        self._logger.debug(f'enter method {self.__recursion_depth=}++')
-
-        # get next row no. and return at end of row
-        row_mask: Matrix.Binary
-        row_no, row_mask = self.next_row_no(matrix_, row_no)  # type: ignore
-        if row_no == -1:
-            # end of row
-            self.__recursion_depth -= 1
-            self._logger.debug(f'reached end of row {self.__recursion_depth=}--')
+        cell_no += 1
+        if cell_no == 81:
+            # end of cell
+            self._logger.debug(f'reached end of cell')
             return matrix_
 
+        addr = Matrix.cell_no_to_addr(cell_no)
         matrix_work: Matrix.Binary = matrix_.copy()
 
-        # Sort row indexes in descending order of pop count
-        positions: list[int] = np.argsort(-Bitmap.popcount(matrix_work[row_no])).tolist()
-
-        while len(positions) > 0:
-            # Process from end of list of positions
-            # (In other words, process in ascending order of popcount)
-            loc: mx.Location = (row_no, positions.pop())  # type: ignore
-            if Bitmap.popcount(matrix_work[loc]) == 1:
+        bits: list[int] = Bitmap.split_single_bit(matrix_work[addr])
+        for bit in bits:
+            # trial to select one bit in target cell
+            matrix_buf: Matrix.Binary
+            matrix_buf = self.prune_by_pivot(matrix_work, addr, bit)
+            if matrix_buf is None:
+                # revert and got next candidate bit
+                self._logger.debug('Revert')
                 continue
-            self._logger.debug(f'{loc=} {positions=}')
-
-            bits: list[int] = Bitmap.split_single_bit(matrix_work[loc])
-            self._logger.debug(f'{Bitmap.to_binary(bits)=}')
-            while len(bits) > 0:
-                # trial to select one bit in target cell
-                matrix_buf: Matrix.Binary
-                matrix_buf = self.prune_by_pivot(matrix_work, loc, bits.pop())  # type: ignore
-                if matrix_buf is None:
-                    # revert and got next candidate bit
-                    self._logger.debug('Revert')
-                    continue
-                else:
-                    # valid and temporarily commit
-                    matrix_work = matrix_buf
-
-                # go down the next node
-                matrix_work = self.brute_force(matrix_work, row_no)
+            else:
+                # valid and temporarily commit
+                matrix_work = matrix_buf
                 self.__log_matrix(matrix_work)
 
-                self._logger.debug('return from node below')
-                if self.__done(matrix_work):
-                    self._logger.debug('successfully done')
-                    return matrix_work
-                else:
-                    self._logger.debug('not done. Revert!!')
-                    matrix_work = matrix_.copy()
+            # go down the next node
+            matrix_work = self.brute_force(matrix_work, cell_no)
+            if self.__done(matrix_work):
+                self._logger.debug('successfully done')
+                return matrix_work
+            else:
+                self._logger.debug('not done. Revert!!')
+                matrix_work = matrix_.copy()
 
-        self.__recursion_depth -= 1
-        self._logger.debug(f'exit method {self.__recursion_depth=}--')
-        self._logger.debug('end of loop')
+        self._logger.debug('end of loop of bits')
 
         return matrix_work
 
