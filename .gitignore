@@ -1,7 +1,6 @@
 *.log
 backup.py
-*test*.py
-*test*.ipynb
+*test*.*
 **/__pycache__/
 .vscode/
 cp-colabo.sh
