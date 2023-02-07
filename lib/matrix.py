@@ -22,7 +22,7 @@ class Matrix:
     """Matrix super class"""
 
     # Type Alias
-    Binary: TypeAlias = npt.NDArray[np.int_]
+    Binary: TypeAlias = npt.NDArray[np.int16]
     Decimal: TypeAlias = npt.NDArray[np.str_]
     Mask: TypeAlias = npt.NDArray[np.bool_]
 
