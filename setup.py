@@ -9,7 +9,7 @@ setup(
     ext_modules=[
         Extension(
             'bruteforce',
-            sources=['wrap_bruteforce.c', 'bruteforce.c'],
+            sources=['src/wrap_bruteforce.c', 'src/bruteforce.c', 'src/bitmap.c', 'src/matrix.c'],
             include_dirs=[] + get_numpy_include_dirs(),
             library_dirs=[],
             libraries=[],

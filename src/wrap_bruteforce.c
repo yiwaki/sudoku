@@ -42,7 +42,7 @@ static PyObject *wrap_bruteforce(PyObject *self, PyObject *args) {
 
     mat_x = PyArray_DATA(x);
     mat_y = PyArray_DATA(y);
-    bruteforce(mat_x, mat_y, -1);
+    bruteforce(mat_x, -1, mat_y);
 
     return y;
 }
