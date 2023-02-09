@@ -1,9 +1,10 @@
 #ifndef __BRUTEFORCE_H__
 #define __BRUTEFORCE_H__
 
-#include <stdbool.h>
-
 #include "bitmap.h"
+#include "matrix.h"
+
+#define MATRIX_SIZE 9
 
 typedef bitmap_t matrix_t[MATRIX_SIZE][MATRIX_SIZE];
 

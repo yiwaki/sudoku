@@ -33,23 +33,23 @@ void block_range(const block_t block_type, const int block_no, int row_range[], 
     switch (block_type) {
         case ROW:
             row_range[0] = block_no;
-            row_range[1] = block_no + 1;
+            row_range[1] = row_range[0] + 1;
             col_range[0] = 0;
-            col_range[1] = 9;
+            col_range[1] = MATRIX_SIZE;
             break;
 
         case COLUMN:
             row_range[0] = 0;
-            row_range[1] = 9;
+            row_range[1] = MATRIX_SIZE;
             col_range[0] = block_no;
-            col_range[1] = block_no + 1;
+            col_range[1] = col_range[0] + 1;
             break;
 
         case SQUARE:
-            row_range[0] = block_no / 3;
-            row_range[1] = block_no / 3 + 3;
-            col_range[0] = block_no % 3;
-            col_range[1] = block_no % 3 + 3;
+            row_range[0] = block_no % SQUARE_SIZE;
+            row_range[1] = row_range[0] + SQUARE_SIZE;
+            col_range[0] = block_no / SQUARE_SIZE * SQUARE_SIZE;
+            col_range[1] = col_range[0] + SQUARE_SIZE;
             break;
 
         default:
