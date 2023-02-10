@@ -7,7 +7,7 @@ void cell_no_to_addr(const int cell_no, address_t *addr) {
     addr->col = cell_no % MATRIX_SIZE;
 }
 
-int addr_to_block_no(const block_t block_type, const address_t *addr) {
+int addr_to_block_no(const block_t block_type, const address_t *const addr) {
     int block_no;
     switch (block_type) {
         case ROW:
@@ -19,7 +19,7 @@ int addr_to_block_no(const block_t block_type, const address_t *addr) {
             break;
 
         case SQUARE:
-            block_no = addr->row / 3 * 3 + addr->col / 3;
+            block_no = addr->row / SQUARE_SIZE * SQUARE_SIZE + addr->col / SQUARE_SIZE;
             break;
 
         default:
@@ -46,9 +46,9 @@ void block_range(const block_t block_type, const int block_no, int row_range[], 
             break;
 
         case SQUARE:
-            row_range[0] = block_no % SQUARE_SIZE;
+            row_range[0] = block_no / SQUARE_SIZE * SQUARE_SIZE;
             row_range[1] = row_range[0] + SQUARE_SIZE;
-            col_range[0] = block_no / SQUARE_SIZE * SQUARE_SIZE;
+            col_range[0] = block_no % SQUARE_SIZE * SQUARE_SIZE;
             col_range[1] = col_range[0] + SQUARE_SIZE;
             break;
 
