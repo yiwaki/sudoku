@@ -4,7 +4,7 @@
 
 #define BIT_LEN 9
 
-int split_single_bit(const bitmap_t bit, bitmap_t bits[BIT_LEN]) {
+int split_single_bit(const bitmap_t bit, bitmap_t bits[]) {
     int cnt = 0;
 
     memset(bits, 0, BIT_LEN * sizeof(bitmap_t));
@@ -30,14 +30,15 @@ int popcount(const bitmap_t bit) {
     return cnt;
 }
 
-char *to_binary(const bitmap_t bmp) {
+char* to_binary(const bitmap_t bmp) {
     static char bin[BIT_LEN + 1];
-    char *ptr;
+    char* ptr;
     ptr = bin;
     for (int i = 0; i < BIT_LEN; i++) {
         if (bmp & 0b100000000 >> i) {
             *ptr = '1';
-        } else {
+        }
+        else {
             *ptr = '0';
         }
         ptr++;
