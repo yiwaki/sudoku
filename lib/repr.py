@@ -68,7 +68,7 @@ class Repr_:
         return out
 
     def __new__(cls) -> Self:  # type: ignore
-        return cls
+        return super().__new__(cls)
 
 
 if __name__ == '__main__':
