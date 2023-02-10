@@ -11,7 +11,7 @@ a
 *.pickle
 *.code-workspace
 *.dSYM/
-bruteforce.cpython-311-darwin.so
+bruteforce.cp*
 build/
 .ipynb_checkpoints/
 .mypy_cache/
