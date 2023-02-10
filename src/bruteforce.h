@@ -8,6 +8,6 @@
 
 typedef bitmap_t matrix_t[MATRIX_SIZE][MATRIX_SIZE];
 
-void bruteforce(const matrix_t *x, int n, matrix_t *y);
+void bruteforce(matrix_t* x, int n, matrix_t* y);
 
 #endif  // BRUTEFORCE_H

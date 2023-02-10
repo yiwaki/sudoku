@@ -2,12 +2,12 @@
 
 #include "bruteforce.h"
 
-void cell_no_to_addr(const int cell_no, address_t *addr) {
+void cell_no_to_addr(const int cell_no, address_t* addr) {
     addr->row = cell_no / MATRIX_SIZE;
     addr->col = cell_no % MATRIX_SIZE;
 }
 
-int addr_to_block_no(const block_t block_type, const address_t *const addr) {
+int addr_to_block_no(const block_t block_type, const address_t* const addr) {
     int block_no;
     switch (block_type) {
         case ROW:

@@ -18,8 +18,8 @@ typedef struct {
     int col;
 } address_t;
 
-void cell_no_to_addr(const int cell_no, address_t *addr);
-int addr_to_block_no(const block_t block_type, const address_t *const addr);
+void cell_no_to_addr(const int cell_no, address_t* addr);
+int addr_to_block_no(const block_t block_type, const address_t* const addr);
 void block_range(const block_t block_type, const int block_no, int row_range[], int col_range[]);
 
 #endif  // MATRIX_H
