@@ -1,13 +1,16 @@
-#ifndef __MATRIX_H__
-#define __MATRIX_H__
+#ifndef MATRIX_H
+#define MATRIX_H
 
 #include "bruteforce.h"
 
-#define BLOCK_TYPE_CNT 3
+#define MATRIX_SIZE 9
+#define SQUARE_SIZE 3
+
 typedef enum {
     ROW = 0,
     COLUMN,
-    SQUARE
+    SQUARE,
+    BLOCK_TYPE_CNT
 } block_t;
 
 typedef struct {
@@ -16,7 +19,7 @@ typedef struct {
 } address_t;
 
 void cell_no_to_addr(const int cell_no, address_t *addr);
-int addr_to_block_no(const block_t block_type, const address_t *addr);
+int addr_to_block_no(const block_t block_type, const address_t *const addr);
 void block_range(const block_t block_type, const int block_no, int row_range[], int col_range[]);
 
-#endif
+#endif  // MATRIX_H
