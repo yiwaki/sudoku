@@ -18,3 +18,4 @@ build/
 */.DS_Store
 .DS_Store
 bruteforce
+src/bruteforce.exe
