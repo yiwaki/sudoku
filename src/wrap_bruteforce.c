@@ -5,12 +5,12 @@
 
 #include "bruteforce.h"
 
-static PyObject *wrap_bruteforce(PyObject *self, PyObject *args) {
+static PyObject* wrap_bruteforce(PyObject* self, PyObject* args) {
     npy_intp ndim;
-    npy_intp *dim;
+    npy_intp* dim;
     int type;
-    PyObject *x, *y;
-    matrix_t *mat_x, *mat_y;
+    PyObject* x, * y;
+    matrix_t* mat_x, * mat_y;
 
     if (!PyArg_ParseTuple(args, "O!", &PyArray_Type, &x))
         return NULL;
@@ -47,13 +47,13 @@ static PyObject *wrap_bruteforce(PyObject *self, PyObject *args) {
 
 static PyMethodDef methods[] = {
     {"bruteforce", wrap_bruteforce, METH_VARARGS, ""},
-    {NULL, NULL, 0, NULL}};
+    {NULL, NULL, 0, NULL} };
 
 static struct PyModuleDef module = {
     PyModuleDef_HEAD_INIT,
     "bruteforce", "Some documentation",
     -1,
-    methods};
+    methods };
 
 PyMODINIT_FUNC PyInit_bruteforce(void) {
     import_array();
