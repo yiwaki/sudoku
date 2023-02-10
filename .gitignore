@@ -2,7 +2,6 @@
 backup.py
 *test*.*
 **/__pycache__/
-.vscode/
 cp-colabo.sh
 Pipfile
 notice.txt

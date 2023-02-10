@@ -1,0 +1,33 @@
+{
+  "python.linting.pycodestyleEnabled": false,
+  "python.linting.enabled": true,
+  "python.linting.flake8Enabled": true,
+  "cSpell.words": [
+    "anyarray",
+    "argsort",
+    "bruteforce",
+    "colaboratory",
+    "dfstyle",
+    "dftype",
+    "iarr",
+    "ilis",
+    "inarr",
+    "ipynb",
+    "levelname",
+    "loadtxt",
+    "logfilepath",
+    "narr",
+    "ndarr",
+    "ndim",
+    "numpy",
+    "putmask",
+    "rhead",
+    "STIX",
+    "tablefmt",
+    "termcolor",
+    "xlis"
+  ],
+  "cSpell.ignoreWords": ["NDDN", "NNDD", "NNDN", "addrs", "cmodule", "isobit"],
+  "cmake.sourceDirectory": "${workspaceFolder}/src",
+  "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
+}
