@@ -1,3 +1,4 @@
+# python setup.py build_ext --inplace
 from distutils.core import Extension, setup
 
 from numpy.distutils.misc_util import get_numpy_include_dirs

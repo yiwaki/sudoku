@@ -50,10 +50,10 @@ bool _prune_by_pivot(const matrix_t *x, const address_t *pivot, bitmap_t bit, ma
                 (*y)[row_no][col_no] &= (~bit);
 
                 if ((*y)[row_no][col_no] == 0) {
-                    printf("pivot=(%d,%d)\n", pivot->row, pivot->col);
-                    printf(
-                        "revert: type:%d bk#=%d addr=(%d,%d) bit=%s\n",
-                        block_type, block_no, row_no, col_no, to_binary(bit));
+                    // printf("pivot=(%d,%d)\n", pivot->row, pivot->col);
+                    // printf(
+                    //     "revert: type:%d bk#=%d addr=(%d,%d) bit=%s\n",
+                    //     block_type, block_no, row_no, col_no, to_binary(bit));
                     return false;
                 }
             }
@@ -91,35 +91,35 @@ void bruteforce(const matrix_t *x, int cell_no, matrix_t *y) {
 
 #ifdef DEBUG
 int main(void) {
-    int r_range[2], c_range[2];
-    for (int r = 0; r < MATRIX_SIZE; r++) {
-        for (int c = 0; c < MATRIX_SIZE; c++) {
-            address_t addr = {r, c};
-            int b = addr_to_block_no(SQUARE, &addr);
-            printf("%d ", b);
-        }
-        printf("\n");
-    }
+    // int r_range[2], c_range[2];
+    // for (int r = 0; r < MATRIX_SIZE; r++) {
+    //     for (int c = 0; c < MATRIX_SIZE; c++) {
+    //         address_t addr = {r, c};
+    //         int b = addr_to_block_no(SQUARE, &addr);
+    //         printf("%d ", b);
+    //     }
+    //     printf("\n");
+    // }
 
-    for (int t = 0; t < BLOCK_TYPE_CNT; t++) {
-        printf("type:%d\n", t);
-        for (int i = 0; i < 9; i++) {
-            block_range(t, i, r_range, c_range);
-            printf("([%d,%d],[%d,%d]) ", r_range[0], r_range[1], c_range[0], c_range[1]);
-            if (i % 3 == 2) printf("\n");
-        }
-    }
+    // for (int t = 0; t < BLOCK_TYPE_CNT; t++) {
+    //     printf("type:%d\n", t);
+    //     for (int i = 0; i < 9; i++) {
+    //         block_range(t, i, r_range, c_range);
+    //         printf("([%d,%d],[%d,%d]) ", r_range[0], r_range[1], c_range[0], c_range[1]);
+    //         if (i % 3 == 2) printf("\n");
+    //     }
+    // }
 
     matrix_t x = {
-        {64, 8, 256, 16, 2, 4, 128, 32, 1},
-        {16, 1, 128, 256, 32, 8, 64, 4, 2},
-        {4, 32, 2, 128, 1, 64, 16, 256, 8},
-        {28, 16, 32, 1, 4, 2, 8, 64, 256},
-        {2, 4, 1, 8, 64, 256, 32, 16, 128},
-        {56, 64, 8, 32, 128, 16, 2, 1, 4},
-        {32, 2, 4, 64, 8, 1, 256, 128, 16},
-        {1, 128, 16, 2, 256, 32, 4, 8, 64},
-        {8, 256, 64, 4, 16, 128, 1, 2, 32}};
+        {511, 8, 256, 16, 2, 4, 128, 32, 511},
+        {511, 511, 511, 511, 511, 511, 511, 511, 511},
+        {511, 32, 2, 128, 511, 64, 16, 256, 511},
+        {511, 16, 511, 511, 4, 511, 511, 64, 511},
+        {511, 4, 511, 8, 64, 256, 511, 16, 511},
+        {256, 511, 511, 32, 128, 16, 511, 511, 4},
+        {32, 511, 511, 511, 511, 511, 511, 511, 16},
+        {1, 511, 511, 511, 511, 511, 511, 511, 64},
+        {511, 256, 64, 4, 511, 128, 1, 2, 511}};
     matrix_t y;
 
     bruteforce(&x, -1, &y);
