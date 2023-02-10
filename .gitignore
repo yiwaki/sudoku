@@ -5,6 +5,7 @@ backup.py
 cp-colabo.sh
 Pipfile
 notice.txt
+.vscode
 a.*
 a
 *.pickle
