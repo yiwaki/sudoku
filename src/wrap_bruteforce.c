@@ -1,8 +1,6 @@
 #include <Python.h>
 #include <numpy/arrayobject.h>
 #include <numpy/arrayscalars.h>
-// #include <stdio.h>
-// #include <stdlib.h>
 #include <stdbool.h>
 
 #include "bruteforce.h"
