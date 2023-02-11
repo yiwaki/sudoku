@@ -710,7 +710,6 @@ class Sudoku(PruneBits, IsolatedBit, BruteForce, Verify, LogCtrl):
             elif changed:
                 continue
             else:
-                self.into_msg_area()
                 break
 
         # run brute force algorism
