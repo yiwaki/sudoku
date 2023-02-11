@@ -672,7 +672,7 @@ class Sudoku(PruneBits, IsolatedBit, BruteForce, Verify, LogCtrl):
         }
 
     # solve sudoku
-    def __solve(self) -> bool:
+    def __solve(self) -> None:
         """solve the problem"""
         global run_mode
         # C Version
@@ -681,7 +681,7 @@ class Sudoku(PruneBits, IsolatedBit, BruteForce, Verify, LogCtrl):
             self._logger.info(msg)
             print(msg)
             self._working = c_brute_force(self._working)
-            return True
+            return
 
         # Python Version
         while True:
@@ -697,7 +697,7 @@ class Sudoku(PruneBits, IsolatedBit, BruteForce, Verify, LogCtrl):
                 finished, changed = self.prune_bits()
                 if finished:
                     self.into_msg_area()
-                    return True
+                    return
                 elif not changed:
                     break
 
@@ -706,7 +706,7 @@ class Sudoku(PruneBits, IsolatedBit, BruteForce, Verify, LogCtrl):
             finished, changed = self.isolated_bits()
             if finished:
                 self.into_msg_area()
-                return True
+                return
             elif changed:
                 continue
             else:
@@ -724,9 +724,9 @@ class Sudoku(PruneBits, IsolatedBit, BruteForce, Verify, LogCtrl):
             msg = 'skipped Brute Force'
             self._logger.info(msg)
             print(msg)
-            self._working = c_brute_force(self._working)
+
         self.into_msg_area()
-        return True
+        return
 
     def run(self) -> Self:
         """run method to solve"""
@@ -738,11 +738,7 @@ class Sudoku(PruneBits, IsolatedBit, BruteForce, Verify, LogCtrl):
         if self._problem is None:
             self._logger.warning('no sudoku data loaded')
         else:
-            if self.__solve():
-                self._logger.info('completed!')
-            else:
-                self._logger.error(f'incomplete (trial:{self._trial})')
-
+            self.__solve()
             self.result = Bitmap.bmp_to_dec(self._working)  # type: ignore
 
         end = time.process_time()
