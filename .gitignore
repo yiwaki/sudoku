@@ -11,7 +11,8 @@ a
 *.pickle
 *.code-workspace
 *.dSYM/
-*.cpython*
+*.so
+*.pyd
 build/
 .ipynb_checkpoints/
 .mypy_cache/
