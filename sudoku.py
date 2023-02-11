@@ -671,41 +671,34 @@ class Sudoku(PruneBits, IsolatedBit, BruteForce, Verify, LogCtrl):
             Square: [0] * Matrix.size,
         }
 
-    # solve sudoku
-    def __solve(self) -> None:
-        """solve the problem"""
-        global run_mode
-        # C Version
-        if run_mode == RunMode.C_BRUTE_FORCE:
-            msg = 'execute Brute Force (C version)'
-            self._logger.info(msg)
-            print(msg)
-            self._working = c_brute_force(self._working)
-            return
-
-        # Python Version
+    # solve sudoku (Python version)
+    def __py_solve(self) -> None:
         while True:
             # run prune bits algorism
             self.into_msg_area('PRUNE_BITS')
-            self._bf_cnt = 0
+            msg = 'execute Prune Bits'
+            self._logger.info(msg)
+            print(msg)
 
-            # run prune bits algorism
+            self._bf_cnt = 0
             finished: bool
             changed: bool
             while True:
                 self._trial += 1
                 finished, changed = self.prune_bits()
                 if finished:
-                    self.into_msg_area()
                     return
                 elif not changed:
                     break
 
             # run isolated bits algorism
             self.into_msg_area('ISOLATED_BITS')
+            msg = 'execute Isolated Bits'
+            self._logger.info(msg)
+            print(msg)
+
             finished, changed = self.isolated_bits()
             if finished:
-                self.into_msg_area()
                 return
             elif changed:
                 continue
@@ -713,9 +706,10 @@ class Sudoku(PruneBits, IsolatedBit, BruteForce, Verify, LogCtrl):
                 break
 
         # run brute force algorism
+        global run_mode
         self.into_msg_area('BRUTE_FORCE')
         if run_mode == RunMode.PY_BRUTE_FORCE:
-            msg = 'execute Brute Force (Python version)'
+            msg = 'execute Brute Force (Python)'
             self._logger.info(msg)
             print(msg)
             self._working = self.brute_force(self._working)
@@ -724,8 +718,24 @@ class Sudoku(PruneBits, IsolatedBit, BruteForce, Verify, LogCtrl):
             self._logger.info(msg)
             print(msg)
 
+    # solve sudoku (C version)
+    def __c_solve(self) -> None:
+        self.into_msg_area('BRUTE_FORCE')
+        msg = 'execute Brute Force (C)'
+        self._logger.info(msg)
+        print(msg)
+        self._working = c_brute_force(self._working)
+
+    # solve sudoku
+    def __solve(self) -> None:
+        """solve the problem"""
+        global run_mode
+        if run_mode == RunMode.C_BRUTE_FORCE:
+            self.__c_solve()
+        else:
+            self.__py_solve()
+
         self.into_msg_area()
-        return
 
     def run(self) -> Self:
         """run method to solve"""
