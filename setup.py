@@ -8,7 +8,7 @@ setup(
     packages=[],
     ext_modules=[
         Extension(
-            'bruteforce',
+            'sudoku',
             sources=['src/wrap_bruteforce.c', 'src/bruteforce.c', 'src/bitmap.c', 'src/matrix.c'],
             include_dirs=[] + get_numpy_include_dirs(),
             library_dirs=[],
