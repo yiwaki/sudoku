@@ -2,14 +2,12 @@
 
 #include <string.h>
 
-#define BIT_LEN 9
-
 int split_single_bit(const bitmap_t bit, bitmap_t bits[]) {
     int cnt = 0;
 
-    memset(bits, 0, BIT_LEN * sizeof(bitmap_t));
+    memset(bits, 0, BITMAP_DIGIT * sizeof(bitmap_t));
 
-    for (int i = 0; i < BIT_LEN; i++) {
+    for (int i = 0; i < BITMAP_DIGIT; i++) {
         bitmap_t target_bit = 1 << i;
         if (bit & target_bit) {
             bits[cnt] = target_bit;
@@ -21,7 +19,8 @@ int split_single_bit(const bitmap_t bit, bitmap_t bits[]) {
 
 int popcount(const bitmap_t bit) {
     int cnt = 0;
-    for (int i = 0; i < BIT_LEN; i++) {
+
+    for (int i = 0; i < BITMAP_DIGIT; i++) {
         bitmap_t target_bit = 1 << i;
         if (bit & target_bit) {
             cnt++;
@@ -30,19 +29,18 @@ int popcount(const bitmap_t bit) {
     return cnt;
 }
 
-char* to_binary(const bitmap_t bmp) {
-    static char bin[BIT_LEN + 1];
+char* to_binary(const bitmap_t bmp, char bin_str[]) {
     char* ptr;
-    ptr = bin;
-    for (int i = 0; i < BIT_LEN; i++) {
+
+    ptr = bin_str;
+    for (int i = 0; i < BITMAP_DIGIT; i++) {
         if (bmp & 0b100000000 >> i) {
             *ptr = '1';
-        }
-        else {
+        } else {
             *ptr = '0';
         }
         ptr++;
     }
-    bin[BIT_LEN] = '\0';
-    return bin;
+    bin_str[BITMAP_DIGIT] = '\0';
+    return bin_str;
 }

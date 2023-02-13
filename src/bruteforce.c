@@ -8,7 +8,7 @@
 #include "bitmap.h"
 #include "matrix.h"
 
-bool _done(matrix_t x) {
+bool _done(const matrix_t* const x) {
     for (int block_type = 0; block_type < BLOCK_TYPE_CNT; block_type++) {
         for (int block_no = 0; block_no < MATRIX_SIZE; block_no++) {
             bitmap_t bmp = 0;
@@ -18,9 +18,9 @@ bool _done(matrix_t x) {
 
             for (int row_no = row_range[0]; row_no < row_range[1]; row_no++) {
                 for (int col_no = col_range[0]; col_no < col_range[1]; col_no++) {
-                    bmp |= x[row_no][col_no];
+                    bmp |= (*x)[row_no][col_no];
 
-                    if (popcount(x[row_no][col_no]) > 1) return false;
+                    if (popcount((*x)[row_no][col_no]) > 1) return false;
                 }
             }
 
@@ -30,7 +30,9 @@ bool _done(matrix_t x) {
     return true;
 }
 
-bool _prune_by_pivot(matrix_t* x, const address_t* pivot, bitmap_t bit, matrix_t* y) {
+bool _prune_by_pivot(const matrix_t* const x, const address_t* const pivot,
+    const bitmap_t bit, matrix_t* const y) {
+
     memcpy(y, x, sizeof(matrix_t));
 
     for (int block_type = 0; block_type < BLOCK_TYPE_CNT; block_type++) {
@@ -57,7 +59,7 @@ bool _prune_by_pivot(matrix_t* x, const address_t* pivot, bitmap_t bit, matrix_t
     return true;
 }
 
-void bruteforce(matrix_t* x, int cell_no, matrix_t* y) {
+void bruteforce(const matrix_t* const x, int cell_no, matrix_t* const y) {
     address_t addr;
     bitmap_t bits[MATRIX_SIZE];
 
@@ -77,7 +79,7 @@ void bruteforce(matrix_t* x, int cell_no, matrix_t* y) {
 
         bruteforce(y, cell_no, &work);
 
-        if (_done(work)) {
+        if (_done(&work)) {
             memcpy(y, work, sizeof(matrix_t));
             return;
         }
@@ -101,9 +103,10 @@ int main(void) {
 
     bruteforce(&x, -1, &y);
 
+    char bin_str[BITMAP_DIGIT];
     for (int row = 0; row < MATRIX_SIZE; row++) {
         for (int col = 0; col < MATRIX_SIZE; col++) {
-            printf("%s ", to_binary(y[row][col]));
+            printf("%s ", to_binary(y[row][col], bin_str));
         }
         printf("\n");
     }

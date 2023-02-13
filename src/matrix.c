@@ -2,7 +2,7 @@
 
 #include "bruteforce.h"
 
-void cell_no_to_addr(const int cell_no, address_t* addr) {
+void cell_no_to_addr(const int cell_no, address_t* const addr) {
     addr->row = cell_no / MATRIX_SIZE;
     addr->col = cell_no % MATRIX_SIZE;
 }

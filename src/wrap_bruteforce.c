@@ -5,12 +5,14 @@
 
 #include "bruteforce.h"
 
-static PyObject* wrap_bruteforce(PyObject* self, PyObject* args) {
+static PyObject* wrap_bruteforce(const PyObject* const self, const PyObject* const args) {
     npy_intp ndim;
     npy_intp* dim;
     int type;
-    PyObject* x, * y;
-    matrix_t* mat_x, * mat_y;
+    PyObject* x;
+    PyObject* y;
+    matrix_t* mat_x;
+    matrix_t* mat_y;
 
     if (!PyArg_ParseTuple(args, "O!", &PyArray_Type, &x))
         return NULL;
