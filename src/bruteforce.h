@@ -4,10 +4,8 @@
 #include "bitmap.h"
 #include "matrix.h"
 
-#define MATRIX_SIZE 9
-
 typedef bitmap_t matrix_t[MATRIX_SIZE][MATRIX_SIZE];
 
-void bruteforce(matrix_t* x, int n, matrix_t* y);
+void bruteforce(const matrix_t* const x, int n, matrix_t* const y);
 
 #endif  // BRUTEFORCE_H
