@@ -1,5 +1,5 @@
-# cmake -S . -B build
-# cmake --build build --config Debug --target bruteforce -j 10
+# cmake -S . -B ../build
+# cmake --build ../build --config Debug --target bruteforce -j 10
 cmake_minimum_required(VERSION 3.0.0)
 project(sudoku VERSION 0.1.0)
 
