@@ -8,7 +8,7 @@
 #include "bitmap.h"
 #include "matrix.h"
 
-bool _done(matrix_t* const x) {
+bool _done(matrix_t *const x) {
     for (int block_type = 0; block_type < BLOCK_TYPE_CNT; block_type++) {
         for (int block_no = 0; block_no < MATRIX_SIZE; block_no++) {
             bitmap_t bmp = 0;
@@ -30,8 +30,8 @@ bool _done(matrix_t* const x) {
     return true;
 }
 
-bool _prune_by_pivot(matrix_t* const x, const address_t* const pivot,
-    const bitmap_t bit, matrix_t* const y) {
+bool _prune_by_pivot(matrix_t *const x, const address_t *const pivot,
+    const bitmap_t bit, matrix_t *const y) {
 
     memcpy(y, x, sizeof(matrix_t));
 
@@ -59,7 +59,7 @@ bool _prune_by_pivot(matrix_t* const x, const address_t* const pivot,
     return true;
 }
 
-void bruteforce(matrix_t* const x, int cell_no, matrix_t* const y) {
+void bruteforce(matrix_t *const x, int cell_no, matrix_t *const y) {
     address_t addr;
     bitmap_t bits[MATRIX_SIZE];
 
