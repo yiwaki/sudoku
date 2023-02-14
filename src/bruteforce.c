@@ -59,7 +59,7 @@ bool _prune_by_pivot(matrix_t* const x, const address_t* const pivot,
     return true;
 }
 
-void bruteforce(const matrix_t* const x, int cell_no, matrix_t* const y) {
+void bruteforce(matrix_t* const x, int cell_no, matrix_t* const y) {
     address_t addr;
     bitmap_t bits[MATRIX_SIZE];
 
