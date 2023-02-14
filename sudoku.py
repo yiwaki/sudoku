@@ -55,8 +55,7 @@ class LogCtrl:
         if True_:
             Log.resetHandler(self._logger)
         else:
-            Log.setHandler(self._logger, self._handler_name,
-                           self._log_filepath)
+            Log.setHandler(self._logger, self._handler_name, self._log_filepath)
 
     def msg_level(self, msg_lv: str = '') -> Self:  # type: ignore
         i_msg = 'set message level:'
@@ -95,10 +94,8 @@ class IO_:
         """prepare initial bitmap"""
         self._trial = 0
         self._working = (lambda x: 1 << (x - 1))(self._problem)
-        self._working = np.where(self._working == 0, Bitmap.full_bits,
-                                 self._working)
-        self._given_no = np.where(self._working != Bitmap.full_bits, 1,
-                                  0).sum()
+        self._working = np.where(self._working == 0, Bitmap.full_bits, self._working)
+        self._given_no = np.where(self._working != Bitmap.full_bits, 1, 0).sum()
 
     def stats(self, matrix_: Optional[Matrix.Binary] = None) -> str:
         """status message"""
@@ -110,16 +107,14 @@ class IO_:
         return out
 
     def __style_table(self, style: Styler) -> Styler:
-        return style.set_table_styles([{
-            'selector': 'th.row_heading',
-            'props': [('font-weight', 'bold')]
-        }])
+        return style.set_table_styles(
+            [{'selector': 'th.row_heading', 'props': [('font-weight', 'bold')]}]
+        )
 
     def display_result(self) -> None:
         """display result (styler)"""
         df = pd.DataFrame(self.result)
-        style = df.style.set_caption(
-            f'<<< result : {self._problem_filepath} >>>')
+        style = df.style.set_caption(f'<<< result : {self._problem_filepath} >>>')
         mask: Matrix.Mask = self.result == self.problem
 
         style = dfstyle.set_property_mask(style, mask, self.__STY_PROBLEM)
@@ -174,7 +169,8 @@ class IO_:
         tmp = dd.replace('\n', '').replace(' ', '').replace('\t', '')
         if len(tmp) == Matrix.size**2:
             self._problem = np.array(list(tmp), dtype=np.uint16).reshape(
-                Matrix.shape)  # type: ignore
+                Matrix.shape
+            )  # type: ignore
             self.problem = np.where(self._problem == 0, '', self._problem)
             self._working = np.empty(Matrix.shape, dtype=np.uint16)
         else:
@@ -204,8 +200,7 @@ class IO_:
     def display_problem(self) -> None:
         """display problem (styler)"""
         df = pd.DataFrame(np.where(self._problem == 0, '', self._problem))
-        style = df.style.set_caption(
-            f'<<< sudoku : {self._problem_filepath} >>>')
+        style = df.style.set_caption(f'<<< sudoku : {self._problem_filepath} >>>')
         mask = self._problem != 0
         style = dfstyle.set_property_mask(style, mask, self.__STY_PROBLEM)
         style = self.__style_table(style)
@@ -244,15 +239,13 @@ class Verify:
         for block in Block.types:
             for block_no in range(block.cell_count_in_block()):
                 mask: Matrix.Mask = block.block_mask(mx.BlockNo(block_no))
-                if np.bitwise_or.reduce(
-                        self._working[mask]) != Bitmap.full_bits:
+                if np.bitwise_or.reduce(self._working[mask]) != Bitmap.full_bits:
                     return False
         return True
 
     def __verify_cells_complete(self) -> bool:
         """Whether all cells are uniquely complete"""
-        popcount_array: npt.NDArray[np.int_] = Bitmap.popcount(
-            self._working)  # type: ignore
+        popcount_array: npt.NDArray[np.int_] = Bitmap.popcount(self._working)  # type: ignore
         return np.all(popcount_array == 1)  # type: ignore
 
     def verify(self) -> None:
@@ -311,7 +304,8 @@ class PruneBits(IO_):
         for block_no in range(Matrix.size):
             mask = block.block_mask(mx.BlockNo(block_no))
             self._popcount_sum[block][block_no] = Bitmap.popcount(
-                self._working[mask]).sum()  # type: ignore
+                self._working[mask]
+            ).sum()  # type: ignore
 
             if self._popcount_sum[block][block_no] == Matrix.size:
                 self._logger.debug(f'{block.type}: #{block_no}: >>>> skip')
@@ -323,14 +317,13 @@ class PruneBits(IO_):
 
             solved_mask = Bitmap.popcount(self._working) == 1
             unsolved_mask = np.logical_not(solved_mask)
-            solved_bmp = np.bitwise_or.reduce(self._working[mask
-                                                            & solved_mask])
+            solved_bmp = np.bitwise_or.reduce(self._working[mask & solved_mask])
 
-            np.putmask(self._working, mask & unsolved_mask,
-                       self._working & ~solved_bmp)
+            np.putmask(self._working, mask & unsolved_mask, self._working & ~solved_bmp)
 
             self._popcount_sum[block][block_no] = Bitmap.popcount(
-                self._working[mask]).sum()  # type: ignore
+                self._working[mask]
+            ).sum()  # type: ignore
 
             if self._popcount_sum[block][block_no] != popcount_before:
                 change = True
@@ -350,8 +343,7 @@ class PruneBits(IO_):
         while changed:
             changed = False
             for block in Block.types:
-                changed = self.__prune_bits_each(
-                    block) or changed  # type: ignore
+                changed = self.__prune_bits_each(block) or changed  # type: ignore
                 finished = sum(self._popcount_sum[block]) == Matrix.size**2
                 if finished:
                     return (finished, changed)
@@ -411,17 +403,17 @@ class IsolatedBit(IO_):
                 return False  # not isolated
         return True  # isolated
 
-    def __log_isolated_case(self, unsolved_mask: Matrix.Mask,
-                            addr: Matrix.Address, iso_bit: np.uint16) -> None:
+    def __log_isolated_case(
+        self, unsolved_mask: Matrix.Mask, addr: Matrix.Address, iso_bit: np.uint16
+    ) -> None:
         d_msg = f'\n  {Bitmap.to_binary(self._working[addr])} {addr}'
         tmp = self._working[unsolved_mask]
         oth = Coloring.coloring(
-            f'-){Bitmap.to_binary(np.bitwise_or.reduce(tmp))}',
-            attrs=['underline'])
+            f'-){Bitmap.to_binary(np.bitwise_or.reduce(tmp))}', attrs=['underline']
+        )
         d_msg += '\n' + oth
 
-        c_iso_bit = Coloring.coloring(Bitmap.to_binary(iso_bit),
-                                      attrs=['bold'])
+        c_iso_bit = Coloring.coloring(Bitmap.to_binary(iso_bit), attrs=['bold'])
         d_msg += f'\n  {c_iso_bit}'
         self._logger.debug(d_msg)
         self._logger.info(f'{addr} <- {Bitmap.bmp_to_dec(iso_bit)}')
@@ -433,14 +425,13 @@ class IsolatedBit(IO_):
         d_msg += self.stats()
         self._logger.debug(d_msg)
 
-    def __log_not_isolated_case(self, unsolved_mask: Matrix.Mask,
-                                addr: Matrix.Address,
-                                candidate: np.uint16) -> None:
+    def __log_not_isolated_case(
+        self, unsolved_mask: Matrix.Mask, addr: Matrix.Address, candidate: np.uint16
+    ) -> None:
         tmp = Bitmap.to_binary(self._working[addr])
         d_msg = f'\n  {tmp} : {addr}'
         bmp = np.bitwise_or.reduce(self._working[unsolved_mask])
-        oth = Coloring.coloring(f'-){Bitmap.to_binary(bmp)}',
-                                attrs=['underline'])
+        oth = Coloring.coloring(f'-){Bitmap.to_binary(bmp)}', attrs=['underline'])
         d_msg += '\n' + oth
         c_check = Bitmap.to_binary(candidate)
         d_msg += f'\n  {c_check}'
@@ -455,11 +446,11 @@ class IsolatedBit(IO_):
             d_msg = f'{block.type}: block#{block_no}'
             self._logger.debug(d_msg)
             mask = block.block_mask(mx.BlockNo(block_no))
-            unsolved_mask = np.logical_and(
-                Bitmap.popcount(self._working) != 1, mask)
+            unsolved_mask = np.logical_and(Bitmap.popcount(self._working) != 1, mask)
 
             self._popcount_sum[block][block_no] = Bitmap.popcount(
-                self._working[mask]).sum()  # type: ignore
+                self._working[mask]
+            ).sum()  # type: ignore
 
             popcount_before: int = self._popcount_sum[block][block_no]
 
@@ -469,14 +460,12 @@ class IsolatedBit(IO_):
             self._logger.debug(d_msg)
             for addr in tars:
                 unsolved_mask[addr] = False
-                mask_bmp: np.uint16 = np.bitwise_or.reduce(
-                    self._working[unsolved_mask], axis=None)
+                mask_bmp: np.uint16 = np.bitwise_or.reduce(self._working[unsolved_mask], axis=None)
                 candidate: np.uint16 = self._working[addr] & ~mask_bmp
 
                 d_msg = ''
                 if Bitmap.popcount(candidate) == 1:
-                    if not self.__is_isolated_on_other_blocks(
-                            addr, candidate, block):
+                    if not self.__is_isolated_on_other_blocks(addr, candidate, block):
                         d_msg += f'\nskipped: not isolate bit on blocks including {addr}'
                         continue
 
@@ -485,15 +474,14 @@ class IsolatedBit(IO_):
 
                 else:
                     unsolved_mask[addr] = True
-                    self.__log_not_isolated_case(unsolved_mask, addr,
-                                                 candidate)
+                    self.__log_not_isolated_case(unsolved_mask, addr, candidate)
 
             self._popcount_sum[block][block_no] = Bitmap.popcount(
-                self._working[mask]).sum()  # type: ignore
+                self._working[mask]
+            ).sum()  # type: ignore
 
             if self._popcount_sum[block][block_no] != popcount_before:
-                change_count += popcount_before - self._popcount_sum[block][
-                    block_no]
+                change_count += popcount_before - self._popcount_sum[block][block_no]
 
         if change_count == 0:
             self._logger.info('no isolated bit found')
@@ -516,8 +504,7 @@ class IsolatedBit(IO_):
         changed: bool = True
         while changed:
             for block in Block.types:
-                changed = self.__isolated_bits_each(
-                    block) and changed  # type: ignore
+                changed = self.__isolated_bits_each(block) and changed  # type: ignore
 
             finished = sum(self._popcount_sum[Row]) == Matrix.size**2
             if finished:
@@ -530,8 +517,6 @@ class IsolatedBit(IO_):
 
 
 # BruteForce（総当たり）Class
-
-
 class BruteForce(IO_):
     _logger: Log
 
@@ -553,8 +538,7 @@ class BruteForce(IO_):
 
         coverage: np.uint16 = np.bitwise_or.reduce(matrix_[mask])
         if coverage != Bitmap.full_bits:
-            self._logger.debug(
-                f'missing bits coverage={Bitmap.to_binary(coverage)}')
+            self._logger.debug(f'missing bits coverage={Bitmap.to_binary(coverage)}')
             status = False
         return status
 
@@ -566,8 +550,8 @@ class BruteForce(IO_):
                 coverage: np.uint16 = np.bitwise_or.reduce(matrix_[mask])
                 if coverage != Bitmap.full_bits:
                     self._logger.debug(
-                        f'{block.type} {block_no=} '
-                        f'coverage={Bitmap.to_binary(coverage)}')
+                        f'{block.type} {block_no=} ' f'coverage={Bitmap.to_binary(coverage)}'
+                    )
                     return False
 
         status: bool = np.all(Bitmap.popcount(matrix_) == 1)  # type: ignore
@@ -575,8 +559,9 @@ class BruteForce(IO_):
             self._logger.debug('popcount != 0')
         return status
 
-    def prune_by_pivot(self, matrix_: Matrix.Binary, pivot: mx.Location,
-                       bit: np.uint16) -> Optional[Matrix.Binary]:
+    def prune_by_pivot(
+        self, matrix_: Matrix.Binary, pivot: mx.Location, bit: np.uint16
+    ) -> Optional[Matrix.Binary]:
         matrix_work: Matrix.Binary = matrix_.copy()
         pivot_bmp: str = Bitmap.to_binary(matrix_work[pivot])
         target_bit: str = Bitmap.to_binary(bit)
@@ -600,9 +585,7 @@ class BruteForce(IO_):
 
         return matrix_work
 
-    def brute_force(self,
-                    matrix_: Matrix.Binary,
-                    cell_no: int = -1) -> Matrix.Binary:
+    def brute_force(self, matrix_: Matrix.Binary, cell_no: int = -1) -> Matrix.Binary:
         """run brute force algorism"""
         cell_no += 1
         if cell_no == 81:
@@ -617,8 +600,7 @@ class BruteForce(IO_):
         for bit in bits:
             # trial to select one bit in target cell
             matrix_buf: Matrix.Binary
-            matrix_buf = self.prune_by_pivot(matrix_work, addr,
-                                             bit)  # type: ignore
+            matrix_buf = self.prune_by_pivot(matrix_work, addr, bit)  # type: ignore
             if matrix_buf is None:
                 # revert and got next candidate bit
                 self._logger.debug('Revert')
@@ -643,8 +625,6 @@ class BruteForce(IO_):
 
 
 # Sudoku Class - Main Class
-
-
 class RunMode(Enum):
     PY_BRUTE_FORCE = 1
     C_BRUTE_FORCE = 2
@@ -786,11 +766,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser('sudoku')
     parser.add_argument('filename', type=str, help='sudoku problem file')
     run_mode_help = '1:PY_BRUTE_FORCE, 2:C_BRUTE_FORCE, 0:NO_BRUTE_FORCE'
-    parser.add_argument('-r',
-                        '--run_mode',
-                        type=int,
-                        default=1,
-                        help=run_mode_help)
+    parser.add_argument('-r', '--run_mode', type=int, default=1, help=run_mode_help)
     parser.add_argument('--log_lv', type=str, default='')
     parser.add_argument('-l', '--log', type=str, default='a.log')
     parser.add_argument('--nolog', action='store_true')
