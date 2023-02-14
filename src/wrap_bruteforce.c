@@ -5,7 +5,7 @@
 
 #include "bruteforce.h"
 
-static PyObject* wrap_bruteforce(const PyObject* const self, const PyObject* const args) {
+static PyObject* wrap_bruteforce(PyObject* self, PyObject* args) {
     npy_intp ndim;
     npy_intp* dim;
     int type;
