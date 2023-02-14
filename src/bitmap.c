@@ -29,14 +29,15 @@ int popcount(const bitmap_t bit) {
     return cnt;
 }
 
-char* to_binary(const bitmap_t bmp, char bin_str[]) {
-    char* ptr;
+char *to_binary(const bitmap_t bmp, char bin_str[]) {
+    char *ptr;
 
     ptr = bin_str;
     for (int i = 0; i < BITMAP_DIGIT; i++) {
         if (bmp & 0b100000000 >> i) {
             *ptr = '1';
-        } else {
+        }
+        else {
             *ptr = '0';
         }
         ptr++;
