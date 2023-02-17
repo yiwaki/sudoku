@@ -8,7 +8,7 @@
 static PyObject *wrap_bruteforce(PyObject *self, PyObject *args) {
     npy_intp ndim, *dim;
     int type;
-    PyObject *x, *y;
+    PyArrayObject *x, *y;
     matrix_t *mat_x, *mat_y;
 
     if (!PyArg_ParseTuple(args, "O!", &PyArray_Type, &x))
@@ -34,14 +34,14 @@ static PyObject *wrap_bruteforce(PyObject *self, PyObject *args) {
         return NULL;
     }
 
-    y = PyArray_SimpleNew(ndim, dim, type);
+    y = (PyArrayObject *)PyArray_SimpleNew(ndim, dim, type);
     if (y == NULL) return NULL;
 
     mat_x = PyArray_DATA(x);
     mat_y = PyArray_DATA(y);
     bruteforce(mat_x, -1, mat_y);
 
-    return y;
+    return (PyObject *)y;
 }
 
 static PyMethodDef methods[] = {
