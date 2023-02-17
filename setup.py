@@ -1,4 +1,5 @@
 # python setup.py build_ext --inplace
+# python setup.py build_ext --inplace --compiler=mingw32 (for mingw/windows builds)
 from distutils.core import Extension, setup
 
 from numpy.distutils.misc_util import get_numpy_include_dirs
