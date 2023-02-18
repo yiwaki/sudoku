@@ -29,7 +29,7 @@ static PyObject *wrap_bruteforce(PyObject *self, PyObject *args) {
         return NULL;
     }
 
-    if (type != NPY_USHORT) {
+    if (type != NPY_UINT16) {
         PyErr_SetString(PyExc_TypeError, "unexpected dtype of array (not numpy.uint16)");
         return NULL;
     }
@@ -46,13 +46,15 @@ static PyObject *wrap_bruteforce(PyObject *self, PyObject *args) {
 
 static PyMethodDef methods[] = {
     {"c_brute_force", wrap_bruteforce, METH_VARARGS, ""},
-    {NULL, NULL, 0, NULL} };
+    {NULL, NULL, 0, NULL}
+};
 
 static struct PyModuleDef module = {
     PyModuleDef_HEAD_INIT,
     "sudoku", "Some documentation",
     -1,
-    methods };
+    methods
+};
 
 PyMODINIT_FUNC PyInit_sudoku(void) {
     import_array();
