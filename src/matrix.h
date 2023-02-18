@@ -1,8 +1,12 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
+#include "bitmap.h"
+
 #define MATRIX_SIZE (9)
 #define SQUARE_SIZE (3)
+
+typedef bitmap_t matrix_t[MATRIX_SIZE][MATRIX_SIZE];
 
 typedef enum {
     Row = 0,
