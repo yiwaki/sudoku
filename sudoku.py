@@ -274,7 +274,7 @@ STAR_CNT: int = 5
 
 
 class PruneBits(IO_):
-    """Prone Bits (ビット剪定) algorism"""
+    """Prone Bits (ビット剪定) algorithm"""
 
     _working: Matrix.Binary
     _trial: int
@@ -294,7 +294,7 @@ class PruneBits(IO_):
         self._logger.debug(d_msg)
 
     def __prune_bits_each(self, block: Row | Column | Square) -> bool:
-        """execute prune bits algorism"""
+        """execute prune bits algorithm"""
         i_msg = '*' * STAR_CNT + f' prune bits ({block.type}): '
         i_msg += f'trial #{self._trial}-{self._bf_cnt} ' + '*' * STAR_CNT
         self._logger.info(i_msg)
@@ -586,7 +586,7 @@ class BruteForce(IO_):
         return matrix_work
 
     def brute_force(self, matrix_: Matrix.Binary, cell_no: int = -1) -> Matrix.Binary:
-        """run brute force algorism"""
+        """run brute force algorithm"""
         cell_no += 1
         if cell_no == 81:
             # end of cell
@@ -670,7 +670,7 @@ class Sudoku(PruneBits, IsolatedBit, BruteForce, Verify, LogCtrl):
     # solve sudoku (Python version)
     def __py_solve(self) -> None:
         while True:
-            # run prune bits algorism
+            # run prune bits algorithm
             self.into_msg_area('PRUNE_BITS')
             msg = 'execute Prune Bits'
             self._logger.info(msg)
@@ -687,7 +687,7 @@ class Sudoku(PruneBits, IsolatedBit, BruteForce, Verify, LogCtrl):
                 elif not changed:
                     break
 
-            # run isolated bits algorism
+            # run isolated bits algorithm
             self.into_msg_area('ISOLATED_BITS')
             msg = 'execute Isolated Bits'
             self._logger.info(msg)
@@ -701,7 +701,7 @@ class Sudoku(PruneBits, IsolatedBit, BruteForce, Verify, LogCtrl):
             else:
                 break
 
-        # run brute force algorism
+        # run brute force algorithm
         global run_mode
         self.into_msg_area('BRUTE_FORCE')
         if run_mode == RunMode.PY_BRUTE_FORCE:
