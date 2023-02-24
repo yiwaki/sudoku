@@ -36,8 +36,7 @@ char *to_binary(const bitmap_t bmp, char bin_str[]) {
     for (int i = 0; i < BITMAP_DIGIT; i++) {
         if (bmp & 0b100000000 >> i) {
             *ptr = '1';
-        }
-        else {
+        } else {
             *ptr = '0';
         }
         ptr++;
