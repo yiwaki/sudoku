@@ -71,7 +71,7 @@ void bruteforce(const matrix_t *x, int cell_no, matrix_t *y) {
 
     cell_no_to_addr(cell_no, &addr);
 
-    int bit_cnt = split_single_bit((*x)[addr.row][addr.col], bits);
+    int bit_cnt = split_single_bit((*x)[addr.row][addr.col], MATRIX_SIZE, bits);
     for (int i = 0; i < bit_cnt; i++) {
         matrix_t work;
 
