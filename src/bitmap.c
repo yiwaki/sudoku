@@ -2,7 +2,7 @@
 
 #include <string.h>
 
-int split_single_bit(const bitmap_t bit, bitmap_t bits[]) {
+int split_single_bit(bitmap_t bit, bitmap_t bits[]) {
     int cnt = 0;
 
     memset(bits, 0, BITMAP_DIGIT * sizeof(bitmap_t));
@@ -17,7 +17,7 @@ int split_single_bit(const bitmap_t bit, bitmap_t bits[]) {
     return cnt;
 }
 
-int popcount(const bitmap_t bit) {
+int popcount(bitmap_t bit) {
     int cnt = 0;
 
     for (int i = 0; i < BITMAP_DIGIT; i++) {
@@ -29,7 +29,7 @@ int popcount(const bitmap_t bit) {
     return cnt;
 }
 
-char *to_binary(const bitmap_t bmp, char bin_str[]) {
+char *to_binary(bitmap_t bmp, char bin_str[]) {
     char *ptr;
 
     ptr = bin_str;

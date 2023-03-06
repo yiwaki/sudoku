@@ -30,7 +30,7 @@ bool _done(const matrix_t *const x) {
     return true;
 }
 
-bool _prune_by_pivot(const matrix_t *const x, const address_t *const pivot,
+bool _prune_by_pivot(const matrix_t *x, const address_t *pivot,
     const bitmap_t bit, matrix_t *const y) {
 
     memcpy(y, x, sizeof(matrix_t));
@@ -59,7 +59,7 @@ bool _prune_by_pivot(const matrix_t *const x, const address_t *const pivot,
     return true;
 }
 
-void bruteforce(const matrix_t *const x, int cell_no, matrix_t *const y) {
+void bruteforce(const matrix_t *x, int cell_no, matrix_t *y) {
     address_t addr;
     bitmap_t bits[MATRIX_SIZE];
 
