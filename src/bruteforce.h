@@ -3,6 +3,6 @@
 
 #include "matrix.h"
 
-void bruteforce(const matrix_t *const x, int n, matrix_t *const y);
+void bruteforce(const matrix_t *x, int n, matrix_t *y);
 
 #endif  // BRUTEFORCE_H

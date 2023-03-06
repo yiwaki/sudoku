@@ -6,8 +6,8 @@
 
 typedef unsigned short bitmap_t;
 
-int split_single_bit(const bitmap_t bit, bitmap_t bits[]);
-int popcount(const bitmap_t bit);
-char *to_binary(const bitmap_t bmp, char bin_str[]);
+int split_single_bit(bitmap_t bit, bitmap_t bits[]);
+int popcount(bitmap_t bit);
+char *to_binary(bitmap_t bmp, char bin_str[]);
 
 #endif  // BITMAP_H
